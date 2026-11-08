@@ -16,6 +16,7 @@ Ao invés de instalar ferramentas de pentest diretamente no sistema operacional 
 Faça o clone deste repositório e execute o script no seu terminal. Algumas ações de sistema (`rpm-ostree`) podem solicitar sua senha administrativa.
 
 ```bash
+git clone https://github.com/nemo-vg/silverblue-optimizer.git
 cd silverblue-optimizer
 chmod +x silverblue-optimizer.sh
 ./silverblue-optimizer.sh
