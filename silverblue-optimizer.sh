@@ -63,7 +63,18 @@ else
     echo -e "${GREEN}[+] Configuração aplicada com sucesso!${NC}"
 fi
 
-# 5. Provisionamento do Contêiner de Segurança
+# 5.Verificação de Segurança (Firewall)
+echo -e "${YELLOW}--> Verificando status do Firewalld...${NC}"
+if systemctl is-active --quiet firewalld; then
+    echo -e "${GREEN}[+] O Firewalld está ativo e a proteger o sistema.${NC}"
+else
+    echo -e "${YELLOW}--> O Firewalld não está ativo. A iniciar e habilitar o serviço...${NC}"
+    sudo systemctl enable --now firewalld
+    echo -e "${GREEN}[+] Firewalld ativado com sucesso!${NC}"
+fi
+
+
+# 6. Provisionamento do Contêiner de Segurança
 echo -e "\n${YELLOW}--> Configuração de Contêiner (Toolbox/Distrobox)${NC}"
 read -p "Deseja provisionar o contêiner de segurança (Kali Linux) agora? (s/n): " CRIAR_CONTAINER
 
