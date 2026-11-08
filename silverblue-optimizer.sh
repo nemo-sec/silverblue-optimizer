@@ -74,19 +74,27 @@ else
 fi
 
 
-# 6. Provisionamento do Contêiner de Segurança
-echo -e "\n${YELLOW}--> Configuração de Contêiner (Toolbox/Distrobox)${NC}"
-read -p "Deseja provisionar o contêiner de segurança (Kali Linux) agora? (s/n): " CRIAR_CONTAINER
+# 6. Provisionamento do Contêiner de Segurança (Fedora Security Workspace)
+echo -e "\n${YELLOW}--> Configuração de Contêiner de Segurança (Toolbox/Distrobox)${NC}"
+read -p "Deseja provisionar o contêiner de segurança Fedora agora? (s/n): " CRIAR_CONTAINER
 
 if [[ "$CRIAR_CONTAINER" =~ ^[Ss]$ ]]; then
     if command -v toolbox &> /dev/null; then
-        echo -e "${YELLOW}--> Criando contêiner via Toolbox...${NC}"
-        toolbox create --image docker.io/kalilinux/kali-rolling:latest -c kali-sec
-        echo -e "${GREEN}[+] Contêiner 'kali-sec' criado com sucesso!${NC}"
+        echo -e "${YELLOW}--> Criando contêiner seguro via Toolbox (Fedora)...${NC}"
+        toolbox create -c fedora-sec -y
+
+        echo -e "${YELLOW}--> Instalando ferramentas essenciais de cibersegurança...${NC}"
+        toolbox run -c fedora-sec sudo dnf install -y nmap wireshark tcpdump ncat hydra aircrack-ng
+
+        echo -e "${GREEN}[+] Contêiner 'fedora-sec' criado e provisionado com sucesso!${NC}"
     elif command -v distrobox &> /dev/null; then
-        echo -e "${YELLOW}--> Criando contêiner via Distrobox...${NC}"
-        distrobox create --name kali-sec --image docker.io/kalilinux/kali-rolling:latest --yes
-        echo -e "${GREEN}[+] Contêiner 'kali-sec' criado com sucesso!${NC}"
+        echo -e "${YELLOW}--> Criando contêiner seguro via Distrobox (Fedora)...${NC}"
+        distrobox create --name fedora-sec --image registry.fedoraproject.org/fedora-toolbox:latest --yes
+
+        echo -e "${YELLOW}--> Instalando ferramentas essenciais de cibersegurança...${NC}"
+        distrobox enter fedora-sec -- sudo dnf install -y nmap wireshark tcpdump ncat hydra aircrack-ng
+
+        echo -e "${GREEN}[+] Contêiner 'fedora-sec' criado e provisionado com sucesso!${NC}"
     else
         echo -e "${RED}[!] Nem Toolbox nem Distrobox encontrados. Instale um deles primeiro.${NC}"
     fi
